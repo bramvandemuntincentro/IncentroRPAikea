@@ -1,0 +1,572 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Process" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ss="clr-namespace:System.Security;assembly=mscorlib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uix="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property sap2010:Annotation.AnnotationText="Dictionary structure to store configuration data of the process (settings, constants and assets)." Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property sap2010:Annotation.AnnotationText="Transaction item to be processed." Name="io_TransactionItemDT" Type="InOutArgument(ui:QueueItem)" />
+    <x:Property Name="io_OrderedArticlesDT" Type="InOutArgument(sd:DataTable)" />
+    <x:Property Name="io_OrderDetailsDT" Type="InOutArgument(sd:DataTable)" />
+    <x:Property Name="io_CompanyDetailsDT" Type="InOutArgument(sd:DataTable)" />
+    <x:Property Name="io_ArticlesDT" Type="InOutArgument(sd:DataTable)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>1206.4,888.8</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ProcessTransaction_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="42">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Activities.DynamicUpdate</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>UiPath.DataTableUtilities</x:String>
+      <x:String>UiPath.UIAutomationNext.Enums</x:String>
+      <x:String>UiPath.UIAutomationNext.Contracts</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Runtime.InteropServices</x:String>
+      <x:String>UiPath.UIAutomationNext.Activities</x:String>
+      <x:String>UiPath.Platform.ObjectLibrary</x:String>
+      <x:String>UiPath.Shared.Activities</x:String>
+      <x:String>UiPath.Excel</x:String>
+      <x:String>UiPath.Excel.Activities</x:String>
+      <x:String>UiPath.Excel.Activities.Business</x:String>
+      <x:String>UiPath.Shared.Activities.Business</x:String>
+      <x:String>UiPath.Mail</x:String>
+      <x:String>System.Security</x:String>
+      <x:String>UiPath.Mail.SMTP.Activities</x:String>
+      <x:String>UiPath.Mail.Activities</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="35">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>Microsoft.Bcl.AsyncInterfaces</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationNext</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationNext.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>UiPath.Mail.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Mail.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Flowchart sap:VirtualizedContainerService.HintSize="844.8,724" sap2010:WorkflowViewState.IdRef="Flowchart_1">
+    <Flowchart.Variables>
+      <Variable x:TypeArguments="x:String" Name="OrderNumber" />
+      <Variable x:TypeArguments="sd:DataTable" Name="CurrentOrderArticlesDT" />
+      <Variable x:TypeArguments="x:Double" Name="TotalOrderSum" />
+      <Variable x:TypeArguments="x:Int32" Name="CurrentRowIndex" />
+      <Variable x:TypeArguments="sd:DataTable" Name="CurrentCompanyDetailsDT" />
+    </Flowchart.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        <av:Point x:Key="ShapeLocation">40,12.5</av:Point>
+        <av:Size x:Key="ShapeSize">60,75.2</av:Size>
+        <x:Double x:Key="Width">811</x:Double>
+        <x:Double x:Key="Height">687</x:Double>
+        <av:PointCollection x:Key="ConnectorLocation">100,50.1 130,50.1 130,50 138.8,50</av:PointCollection>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <Flowchart.StartNode>
+      <x:Reference>__ReferenceID7</x:Reference>
+    </Flowchart.StartNode>
+    <FlowStep x:Name="__ReferenceID7">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <av:Point x:Key="ShapeLocation">138.8,20</av:Point>
+          <av:Size x:Key="ShapeSize">262.4,60</av:Size>
+          <av:PointCollection x:Key="ConnectorLocation">401.2,50 480,50</av:PointCollection>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <Assign sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_1">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:String">[OrderNumber]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:String">[io_TransactionItemDT.Reference.ToString]</InArgument>
+        </Assign.Value>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </Assign>
+      <FlowStep.Next>
+        <FlowStep x:Name="__ReferenceID0">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <av:Point x:Key="ShapeLocation">480,23.6</av:Point>
+              <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+              <av:PointCollection x:Key="ConnectorLocation">580,76.4 570,76.4 570,105.6</av:PointCollection>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="200,52.8" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Trace" Message="[&quot;Start Processing Order : &quot; + OrderNumber.ToString]">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:LogMessage>
+          <FlowStep.Next>
+            <FlowStep x:Name="__ReferenceID1">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <av:Point x:Key="ShapeLocation">470,105.6</av:Point>
+                  <av:Size x:Key="ShapeSize">200,68.8</av:Size>
+                  <av:PointCollection x:Key="ConnectorLocation">570,174.4 560,174.4 560,195.6</av:PointCollection>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <Sequence DisplayName="Get all ordered articles details" sap:VirtualizedContainerService.HintSize="200,68.8" sap2010:WorkflowViewState.IdRef="Sequence_2">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <ui:FilterDataTable DataTable="[io_OrderedArticlesDT]" DisplayName="Filter Data Table" FilterRowsMode="Keep" sap:VirtualizedContainerService.HintSize="508.8,162.4" sap2010:WorkflowViewState.IdRef="FilterDataTable_4" OutputDataTable="[CurrentOrderArticlesDT]" SelectColumnsMode="Keep">
+                  <ui:FilterDataTable.Filters>
+                    <scg:List x:TypeArguments="ui:FilterOperationArgument" Capacity="4">
+                      <ui:FilterOperationArgument BooleanOperator="And" Operator="EQ">
+                        <ui:FilterOperationArgument.Column>
+                          <InArgument x:TypeArguments="x:String">["Order Number"]</InArgument>
+                        </ui:FilterOperationArgument.Column>
+                        <ui:FilterOperationArgument.Operand>
+                          <InArgument x:TypeArguments="x:Int32">[Cint(OrderNumber)]</InArgument>
+                        </ui:FilterOperationArgument.Operand>
+                      </ui:FilterOperationArgument>
+                    </scg:List>
+                  </ui:FilterDataTable.Filters>
+                  <ui:FilterDataTable.SelectColumns>
+                    <scg:List x:TypeArguments="InArgument" Capacity="4">
+                      <x:Null />
+                    </scg:List>
+                  </ui:FilterDataTable.SelectColumns>
+                </ui:FilterDataTable>
+                <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="508.8,231.2" sap2010:WorkflowViewState.IdRef="CommentOut_3">
+                  <ui:CommentOut.Body>
+                    <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="304,152.8" sap2010:WorkflowViewState.IdRef="Sequence_19">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <Assign sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_13">
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="sd:DataTable">[CurrentOrderArticlesDT]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="sd:DataTable">[io_OrderedArticlesDT.Select("[Order Number]=" + OrderNumber.ToString).CopyToDataTable]</InArgument>
+                        </Assign.Value>
+                      </Assign>
+                    </Sequence>
+                  </ui:CommentOut.Body>
+                </ui:CommentOut>
+                <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[CurrentOrderArticlesDT]" DisplayName="For Each Row in Data Table" sap:VirtualizedContainerService.HintSize="508.8,1611.2" sap2010:WorkflowViewState.IdRef="ForEachRow_2">
+                  <ui:ForEachRow.Body>
+                    <ActivityAction x:TypeArguments="sd:DataRow">
+                      <ActivityAction.Argument>
+                        <DelegateInArgument x:TypeArguments="sd:DataRow" Name="CurrentRow" />
+                      </ActivityAction.Argument>
+                      <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="475.2,1436.8" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                        <Sequence.Variables>
+                          <Variable x:TypeArguments="x:String" Name="CurrentArticleName" />
+                          <Variable x:TypeArguments="x:String" Name="CurrentArticlePrice" />
+                        </Sequence.Variables>
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <uix:NApplicationCard AttachMode="ByInstance" DisplayName="Search ArticleName and Price" sap:VirtualizedContainerService.HintSize="433.6,1011.2" sap2010:WorkflowViewState.IdRef="NApplicationCard_1" InteractionMode="Simulate" OpenMode="Always" Version="V1">
+                          <uix:NApplicationCard.Body>
+                            <ActivityAction x:TypeArguments="x:Object">
+                              <ActivityAction.Argument>
+                                <DelegateInArgument x:TypeArguments="x:Object" Name="WSSessionData" />
+                              </ActivityAction.Argument>
+                              <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="375.2,794.4" sap2010:WorkflowViewState.IdRef="Sequence_6">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <uix:NGoToUrl DisplayName="Go To URL" sap:VirtualizedContainerService.HintSize="333.6,82.4" sap2010:WorkflowViewState.IdRef="NGoToUrl_1" Url="[&quot;https://www.ikea.com/nl/nl/search/products/?q=&quot; + CurrentRow(&quot;Article Number&quot;).ToString]" />
+                                <uix:NGetText DisplayName="Get ArticleName" sap:VirtualizedContainerService.HintSize="333.6,167.2" sap2010:WorkflowViewState.IdRef="NGetText_1">
+                                  <uix:NGetText.Target>
+                                    <uix:TargetAnchorable BrowserURL="https://www.ikea.com/nl/nl/search/products/?q=20281631" DesignTimeRectangle="176, 991, 368, 24" ElementType="Text" FriendlyName="'VADHOLMA'" FullSelectorArgument="&lt;webctrl parentid='search-results' tag='DIV' class='range-revamp-header-section__title--small notranslate' parentclass='range-revamp-header-section' /&gt;" FuzzySelectorArgument="&lt;webctrl parentid='search-results' tag='DIV' class='range-revamp-header-section__title--small notranslate' parentclass='range-revamp-header-section' type='' /&gt;" InformativeScreenshot="5a206f3ee7b933f85ce548846c10511b.png" ScopeSelectorArgument="&lt;html app='chrome.exe' title='* - Zoeken - IKEA' /&gt;" SearchSteps="Selector" />
+                                  </uix:NGetText.Target>
+                                  <uix:NGetText.Text>
+                                    <OutArgument x:TypeArguments="x:String">[CurrentArticleName]</OutArgument>
+                                  </uix:NGetText.Text>
+                                </uix:NGetText>
+                                <Assign DisplayName="Clean ArticleName" sap:VirtualizedContainerService.HintSize="333.6,61.6" sap2010:WorkflowViewState.IdRef="Assign_5">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:String">[CurrentArticleName]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:String">[CurrentArticleName.substring(0,1).ToUpper + CurrentArticleName.substring(1).toLower]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                                <uix:NGetText DisplayName="Get Price" sap:VirtualizedContainerService.HintSize="333.6,167.2" sap2010:WorkflowViewState.IdRef="NGetText_2">
+                                  <uix:NGetText.Target>
+                                    <uix:TargetAnchorable BrowserURL="https://www.ikea.com/nl/nl/search/products/?q=20359154" DesignTimeRectangle="176, 887, 67, 31" ElementType="Text" FriendlyName="'€ 399.-'" FullSelectorArgument="&lt;webctrl class='range-revamp-price ' parentid='search-results' parentclass='range-revamp-compact-price-package__price-wrapper' /&gt;" FuzzySelectorArgument="&lt;webctrl class='range-revamp-price ' parentid='search-results' parentclass='range-revamp-compact-price-package__price-wrapper' tag='SPAN' type='' aaname='' /&gt;" InformativeScreenshot="41179d3018bb511f80260bd33766e695.png" ScopeSelectorArgument="&lt;html app='chrome.exe' title='* - Zoeken - IKEA' /&gt;" SearchSteps="Selector" />
+                                  </uix:NGetText.Target>
+                                  <uix:NGetText.Text>
+                                    <OutArgument x:TypeArguments="x:String">[CurrentArticlePrice]</OutArgument>
+                                  </uix:NGetText.Text>
+                                </uix:NGetText>
+                                <Assign DisplayName="Clean ArticlePrice" sap:VirtualizedContainerService.HintSize="333.6,61.6" sap2010:WorkflowViewState.IdRef="Assign_6">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:String">[CurrentArticlePrice]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:String">[CurrentArticlePrice.Replace(" ", "").Replace(".-", ".00").Replace("€", "").ToString]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                              </Sequence>
+                            </ActivityAction>
+                          </uix:NApplicationCard.Body>
+                          <uix:NApplicationCard.TargetApp>
+                            <uix:TargetApp Area="-9, -9, 1938, 1048" BrowserType="Chrome" IconBase64="iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAGkSURBVDhP7ZLZK8RRFMdvyaNEaWZsjaIQY0tKWV+UF6XxMyhLxhox2R5MIUbJOs3Y9/ws8WTfaoxlpGQSyVZevCj/gtvXvRflgb+AU6dO55zvuafPueTfmOnmJOHaJYlkrkguLFborVJkbYeU2NQsnMc856KTRY/o/dKRbJm65s7SiFoTrewtoNNLCfRgJ4ReHfnRe4eKPpwq6fWRL7Wz3ORiEq3uz6eaGpPQcC3xLrGgwaLDxEISns68YN8Nxp1DBTYEtycq2HZCsbkeAaddjRenO1ZXoyEvx8NgzoOieBBkfCEZ2xsaeBYNY0RORXBVF2Lr2qCp6RT5wMoexBjawV5H91Q6PApH4F82AMd+kOgnY2zA7lY4fEvNYosoQwcSmoxCyGvhbFBcfSt6mDijxYA0YyPU5X0YZuLR+RQQld4C45AW62tReLlwx82xD57PPXF56I/HUwUYC5zbAkSe+6vTDXubYWC8oNRb8QExZ5aB6WQQC+nUYiK1cYiHHKJSOI85WF6rYD1sKwZxhkN8++GM8ucZTd/OaPrtjFmfn+EPGyHvjx8TM72Y+IUAAAAASUVORK5CYII=" Selector="&lt;html app='chrome.exe' url='https://www.ikea.com' /&gt;" Url="https://www.ikea.com" />
+                          </uix:NApplicationCard.TargetApp>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </uix:NApplicationCard>
+                        <Assign DisplayName="Write ArticleName to DT" sap:VirtualizedContainerService.HintSize="433.6,60" sap2010:WorkflowViewState.IdRef="Assign_7">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="x:Object">[CurrentRow("Article Name")]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="x:Object">[CurrentArticleName]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                        <Assign DisplayName="Write ArticlePrice * Quantity to DT" sap:VirtualizedContainerService.HintSize="433.6,60" sap2010:WorkflowViewState.IdRef="Assign_8">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="x:Object">[CurrentRow("Price")]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="x:Double">[Double.Parse(CurrentArticlePrice) * Double.Parse(CurrentRow("Quantity").ToString)]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                        <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="433.6,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Trace" Message="[&quot;Found and created:  &quot; + CurrentArticleName.ToString + &quot; : &quot; + CurrentArticlePrice.ToString]" />
+                      </Sequence>
+                    </ActivityAction>
+                  </ui:ForEachRow.Body>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:ForEachRow>
+              </Sequence>
+              <FlowStep.Next>
+                <FlowStep x:Name="__ReferenceID3">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <av:Point x:Key="ShapeLocation">460,195.6</av:Point>
+                      <av:Size x:Key="ShapeSize">200,68.8</av:Size>
+                      <av:PointCollection x:Key="ConnectorLocation">560,264.4 560,285.6</av:PointCollection>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <Sequence DisplayName="Get total order sum" sap:VirtualizedContainerService.HintSize="200,68.8" sap2010:WorkflowViewState.IdRef="Sequence_9">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <Assign sap:VirtualizedContainerService.HintSize="337.6,60" sap2010:WorkflowViewState.IdRef="Assign_12">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:Double">[TotalOrderSum]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:Double">0</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="{x:Null}" DataTable="[CurrentOrderArticlesDT]" DisplayName="For Each Row in Data Table" sap:VirtualizedContainerService.HintSize="337.6,327.2" sap2010:WorkflowViewState.IdRef="ForEachRow_4">
+                      <ui:ForEachRow.Body>
+                        <ActivityAction x:TypeArguments="sd:DataRow">
+                          <ActivityAction.Argument>
+                            <DelegateInArgument x:TypeArguments="sd:DataRow" Name="CurrentRow" />
+                          </ActivityAction.Argument>
+                          <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="304,152.8" sap2010:WorkflowViewState.IdRef="Sequence_10">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <Assign sap:VirtualizedContainerService.HintSize="262.4,60" sap2010:WorkflowViewState.IdRef="Assign_11">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="x:Double">[TotalOrderSum]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="x:Double">[TotalOrderSum + Double.Parse(CurrentRow("Price").ToString)]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                          </Sequence>
+                        </ActivityAction>
+                      </ui:ForEachRow.Body>
+                    </ui:ForEachRow>
+                    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="337.6,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Trace" Message="[&quot;Calculated total sum of order:  &quot; + TotalOrderSum.ToString]" />
+                  </Sequence>
+                  <FlowStep.Next>
+                    <FlowStep x:Name="__ReferenceID2">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <av:Point x:Key="ShapeLocation">460,285.6</av:Point>
+                          <av:Size x:Key="ShapeSize">200,68.8</av:Size>
+                          <av:PointCollection x:Key="ConnectorLocation">560,354.4 560,375.6</av:PointCollection>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <Sequence DisplayName="Make order info complete" sap:VirtualizedContainerService.HintSize="200,68.8" sap2010:WorkflowViewState.IdRef="Sequence_8">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <ui:LookupDataTable CellValue="{x:Null}" LookupColumnIndex="{x:Null}" LookupDataColumn="{x:Null}" TargetColumnIndex="{x:Null}" TargetColumnName="{x:Null}" TargetDataColumn="{x:Null}" DataTable="[io_OrderDetailsDT]" DisplayName="Private: Lookup Data Table" sap:VirtualizedContainerService.HintSize="333.6,295.2" sap2010:WorkflowViewState.IdRef="LookupDataTable_1" LookupColumnName="Ordernummer" LookupValue="[OrderNumber.ToString]" RowIndex="[CurrentRowIndex]" />
+                        <Assign sap:VirtualizedContainerService.HintSize="333.6,60" sap2010:WorkflowViewState.IdRef="Assign_9">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="x:Object">[io_OrderDetailsDT.Rows(CurrentRowIndex).Item(“TotalOrderSum”)]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="x:Double">[TotalOrderSum]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                        <Assign sap:VirtualizedContainerService.HintSize="333.6,60" sap2010:WorkflowViewState.IdRef="Assign_10">
+                          <Assign.To>
+                            <OutArgument x:TypeArguments="x:Object">[io_OrderDetailsDT.Rows(CurrentRowIndex).Item(“OrderedArticlesDT”)]</OutArgument>
+                          </Assign.To>
+                          <Assign.Value>
+                            <InArgument x:TypeArguments="x:Object">[CurrentOrderArticlesDT]</InArgument>
+                          </Assign.Value>
+                        </Assign>
+                        <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="333.6,92.8" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Trace" Message="[&quot;Wrote TotalOrderSum and OrderArticlesDT to OrderDetailsDT&quot;]" />
+                        <ui:WriteRange AddHeaders="False" DataTable="[CurrentOrderArticlesDT]" DisplayName="Write Range" sap:VirtualizedContainerService.HintSize="333.6,116" sap2010:WorkflowViewState.IdRef="WriteRange_4" SheetName="Sheet2" StartingCell="A1" WorkbookPath="C:\Users\Bram van de Munt\Documents\UiPath\RPA_Academy_ArticlePrice\Opdracht RPA  Academy Developer\+.xlsx" />
+                      </Sequence>
+                      <FlowStep.Next>
+                        <FlowStep x:Name="__ReferenceID4">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <av:Point x:Key="ShapeLocation">460,375.6</av:Point>
+                              <av:Size x:Key="ShapeSize">200,68.8</av:Size>
+                              <av:PointCollection x:Key="ConnectorLocation">560,444.4 560,475.6</av:PointCollection>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                          <Sequence DisplayName="Get company info" sap:VirtualizedContainerService.HintSize="200,68.8" sap2010:WorkflowViewState.IdRef="Sequence_11">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <ui:FilterDataTable DataTable="[io_CompanyDetailsDT]" DisplayName="Filter Data Table" FilterRowsMode="Keep" sap:VirtualizedContainerService.HintSize="333.6,162.4" sap2010:WorkflowViewState.IdRef="FilterDataTable_3" OutputDataTable="[CurrentCompanyDetailsDT]" SelectColumnsMode="Keep">
+                              <ui:FilterDataTable.Filters>
+                                <scg:List x:TypeArguments="ui:FilterOperationArgument" Capacity="4">
+                                  <ui:FilterOperationArgument BooleanOperator="And" Operator="EQ">
+                                    <ui:FilterOperationArgument.Column>
+                                      <InArgument x:TypeArguments="x:String">["Company ID"]</InArgument>
+                                    </ui:FilterOperationArgument.Column>
+                                    <ui:FilterOperationArgument.Operand>
+                                      <InArgument x:TypeArguments="x:Object">[io_OrderDetailsDT.Rows(CurrentRowIndex).Item(“Company ID”)]</InArgument>
+                                    </ui:FilterOperationArgument.Operand>
+                                  </ui:FilterOperationArgument>
+                                </scg:List>
+                              </ui:FilterDataTable.Filters>
+                              <ui:FilterDataTable.SelectColumns>
+                                <scg:List x:TypeArguments="InArgument" Capacity="4">
+                                  <x:Null />
+                                </scg:List>
+                              </ui:FilterDataTable.SelectColumns>
+                            </ui:FilterDataTable>
+                            <ui:WriteRange AddHeaders="False" DataTable="[CurrentCompanyDetailsDT]" DisplayName="Write Range" sap:VirtualizedContainerService.HintSize="333.6,116" sap2010:WorkflowViewState.IdRef="WriteRange_3" SheetName="Sheet3" StartingCell="A1" WorkbookPath="C:\Users\Bram van de Munt\Documents\UiPath\RPA_Academy_ArticlePrice\TestExcel2.xlsx" />
+                          </Sequence>
+                          <FlowStep.Next>
+                            <FlowStep x:Name="__ReferenceID5">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <av:Point x:Key="ShapeLocation">460,475.6</av:Point>
+                                  <av:Size x:Key="ShapeSize">200,68.8</av:Size>
+                                  <av:PointCollection x:Key="ConnectorLocation">560,544.4 560,574.4 550,574.4 550,575.6</av:PointCollection>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <Sequence DisplayName="Create Excel order confirm" sap:VirtualizedContainerService.HintSize="200,68.8" sap2010:WorkflowViewState.IdRef="Sequence_12">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <ui:ExcelApplicationScope Password="{x:Null}" DisplayName="Excel Application Scope" sap:VirtualizedContainerService.HintSize="508.8,2311.2" sap2010:WorkflowViewState.IdRef="ExcelApplicationScope_1" InstanceCachePeriod="3000" WorkbookPath="[&quot;C:\Users\Bram van de Munt\Documents\UiPath\RPA_Academy_ArticlePrice\Opdracht RPA  Academy Developer\&quot; + OrderNumber +&quot;_ConfirmationMail.xlsx&quot;]">
+                                  <ui:ExcelApplicationScope.Body>
+                                    <ActivityAction x:TypeArguments="ui:WorkbookApplication">
+                                      <ActivityAction.Argument>
+                                        <DelegateInArgument x:TypeArguments="ui:WorkbookApplication" Name="ExcelWorkbookScope" />
+                                      </ActivityAction.Argument>
+                                      <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="475.2,2201.6" sap2010:WorkflowViewState.IdRef="Sequence_13">
+                                        <Sequence.Variables>
+                                          <Variable x:TypeArguments="x:Int32" Name="CurrentIndex" />
+                                          <Variable x:TypeArguments="sd:DataTable" Name="OrderedArticlesDT" />
+                                        </Sequence.Variables>
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <ui:ExcelWriteCell Cell="A1" DisplayName="Write Cell" sap:VirtualizedContainerService.HintSize="433.6,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_2" SheetName="Sheet1" Text="Order" />
+                                        <ui:ExcelWriteCell Cell="B1" DisplayName="Write Cell" sap:VirtualizedContainerService.HintSize="433.6,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_3" SheetName="Sheet1" Text="[OrderNumber.ToString]" />
+                                        <ui:ExcelWriteCell Cell="A3" DisplayName="Write Cell" sap:VirtualizedContainerService.HintSize="433.6,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_4" SheetName="Sheet1" Text="Buyer" />
+                                        <ui:ExcelWriteCell Cell="B3" DisplayName="Write Cell" sap:VirtualizedContainerService.HintSize="433.6,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_5" SheetName="Sheet1" Text="[io_OrderDetailsDT.Rows(CurrentRowIndex).Item(“Buyer”).toString]" />
+                                        <ui:ForEach x:TypeArguments="x:Object" CurrentIndex="[CurrentIndex]" DisplayName="For Each" sap:VirtualizedContainerService.HintSize="433.6,433.6" sap2010:WorkflowViewState.IdRef="ForEach`1_1" Values="[{&quot;Company&quot;, &quot;Email&quot;, &quot;Address&quot;, &quot;Creditcard &quot;, &quot;Phone&quot;, &quot;City&quot;}]">
+                                          <ui:ForEach.Body>
+                                            <ActivityAction x:TypeArguments="x:Object">
+                                              <ActivityAction.Argument>
+                                                <DelegateInArgument x:TypeArguments="x:Object" Name="item" />
+                                              </ActivityAction.Argument>
+                                              <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="375.2,308.8" sap2010:WorkflowViewState.IdRef="Sequence_15">
+                                                <sap:WorkflowViewStateService.ViewState>
+                                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                  </scg:Dictionary>
+                                                </sap:WorkflowViewStateService.ViewState>
+                                                <ui:ExcelWriteCell Cell="[&quot;A&quot; + (4 + CurrentIndex).ToString]" DisplayName="Write Cell" sap:VirtualizedContainerService.HintSize="333.6,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_6" SheetName="Sheet1" Text="[item.ToString]" />
+                                                <ui:ExcelWriteCell Cell="[&quot;B&quot; + (4 + CurrentIndex).ToString]" DisplayName="Write Cell" sap:VirtualizedContainerService.HintSize="333.6,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_7" SheetName="Sheet1" Text="[CurrentCompanyDetailsDT.Rows(0).Item(item.ToString).ToString]" />
+                                              </Sequence>
+                                            </ActivityAction>
+                                          </ui:ForEach.Body>
+                                        </ui:ForEach>
+                                        <ui:ExcelWriteCell Cell="A11" DisplayName="Write Cell" sap:VirtualizedContainerService.HintSize="433.6,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_13" SheetName="Sheet1" Text="Article Number" />
+                                        <ui:ExcelWriteCell Cell="[&quot;B&quot; + (12 + CurrentIndex).ToString]" DisplayName="Write Cell" sap:VirtualizedContainerService.HintSize="433.6,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_14" SheetName="Sheet1" Text="Article Name" />
+                                        <ui:ForEachRow ColumnNames="{x:Null}" CurrentIndex="[CurrentIndex]" DataTable="[CurrentOrderArticlesDT]" DisplayName="For Each Row in Data Table" sap:VirtualizedContainerService.HintSize="433.6,867.2" sap2010:WorkflowViewState.IdRef="ForEachRow_6">
+                                          <ui:ForEachRow.Body>
+                                            <ActivityAction x:TypeArguments="sd:DataRow">
+                                              <ActivityAction.Argument>
+                                                <DelegateInArgument x:TypeArguments="sd:DataRow" Name="CurrentRow" />
+                                              </ActivityAction.Argument>
+                                              <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="375.2,692.8" sap2010:WorkflowViewState.IdRef="Sequence_16">
+                                                <sap:WorkflowViewStateService.ViewState>
+                                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                  </scg:Dictionary>
+                                                </sap:WorkflowViewStateService.ViewState>
+                                                <ui:ExcelWriteCell Cell="[&quot;A&quot; + (12 + CurrentIndex).ToString]" DisplayName="Write Cell" sap:VirtualizedContainerService.HintSize="333.6,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_8" SheetName="Sheet1" Text="[CurrentRow(&quot;Article Number&quot;).ToString]" />
+                                                <ui:ExcelWriteCell Cell="[&quot;B&quot; + (12 + CurrentIndex).ToString]" DisplayName="Write Cell" sap:VirtualizedContainerService.HintSize="333.6,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_9" SheetName="Sheet1" Text="[CurrentRow(&quot;Article Name&quot;).ToString]" />
+                                                <ui:ExcelWriteCell Cell="[&quot;C&quot; + (12 + CurrentIndex).ToString]" DisplayName="Write Cell" sap:VirtualizedContainerService.HintSize="333.6,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_10" SheetName="Sheet1" Text="[CurrentRow(&quot;Quantity&quot;).ToString]" />
+                                                <ui:ExcelWriteCell Cell="[&quot;D&quot; + (12 + CurrentIndex).ToString]" DisplayName="Write Cell" sap:VirtualizedContainerService.HintSize="333.6,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_11" SheetName="Sheet1" Text="[CurrentRow(&quot;Price&quot;).ToString]" />
+                                                <ui:ExcelWriteCell Cell="[&quot;E&quot; + (12 + CurrentIndex).ToString]" DisplayName="Write Cell" sap:VirtualizedContainerService.HintSize="333.6,88" sap2010:WorkflowViewState.IdRef="ExcelWriteCell_12" SheetName="Sheet1" Text="[CurrentRow(&quot;Order Number&quot;).ToString]" />
+                                              </Sequence>
+                                            </ActivityAction>
+                                          </ui:ForEachRow.Body>
+                                        </ui:ForEachRow>
+                                      </Sequence>
+                                    </ActivityAction>
+                                  </ui:ExcelApplicationScope.Body>
+                                </ui:ExcelApplicationScope>
+                              </Sequence>
+                              <FlowStep.Next>
+                                <FlowStep x:Name="__ReferenceID6">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <av:Point x:Key="ShapeLocation">450,575.6</av:Point>
+                                      <av:Size x:Key="ShapeSize">200,68.8</av:Size>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <Sequence sap:VirtualizedContainerService.HintSize="375.2,460" sap2010:WorkflowViewState.IdRef="Sequence_20">
+                                    <Sequence.Variables>
+                                      <Variable x:TypeArguments="ss:SecureString" Name="EmailPassword" />
+                                      <Variable x:TypeArguments="x:String" Name="EmailUserName" />
+                                      <Variable x:TypeArguments="x:String" Name="CurrentBuyer" />
+                                    </Sequence.Variables>
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                    <ui:GetRobotCredential TimeoutMS="{x:Null}" AssetName="[in_Config(&quot;LoginEmail&quot;).ToString]" DisplayName="Private: Get Credential" FolderPath="[in_Config(&quot;OrchestratorFolderName&quot;).ToString]" sap:VirtualizedContainerService.HintSize="333.6,80.8" sap2010:WorkflowViewState.IdRef="GetRobotCredential_1" Password="[EmailPassword]" Username="[EmailUserName]" />
+                                    <Assign sap:VirtualizedContainerService.HintSize="333.6,60" sap2010:WorkflowViewState.IdRef="Assign_14">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="x:String">[CurrentBuyer]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="x:String">[io_OrderDetailsDT.Rows(CurrentRowIndex).Item(“Buyer”).tostring.Split(" "c)(0).ToString]</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                    <ui:SendMail Bcc="{x:Null}" Cc="{x:Null}" MailMessage="{x:Null}" Password="{x:Null}" ReplyTo="{x:Null}" TimeoutMS="{x:Null}" Body="[&quot;Dear &quot; + CurrentBuyer + &quot;,&quot; + Chr(10) + Chr(10) +&#xD;&#xA;&quot;I hereby confirm your order &quot; + OrderNumber.ToString + &quot;. The order details are attached to this email. &quot; + Chr(10) + Chr(10) +&#xD;&#xA;&quot;If you have any further problems or questions, do not hesitate to contact us.&quot; + Chr(10) + Chr(10) +&#xD;&#xA;&quot;Kindest regards, &quot; + Chr(10) + Chr(10) +&#xD;&#xA;&quot;Robbie from Ikea&quot;]" DisplayName="Send SMTP Mail Message" Email="[EmailUserName]" EnableSSL="True" From="robbie.derobot@ikea.com" sap:VirtualizedContainerService.HintSize="333.6,146.4" sap2010:WorkflowViewState.IdRef="SendMail_1" IsBodyHtml="False" Name="Robbie de Robot" Port="465" SecureConnection="Auto" SecurePassword="[EmailPassword]" Server="smtp.gmail.com" Subject="[&quot;Confirmation Order &quot; + OrderNumber.ToString]" To="bram.vandemunt@incentro.com">
+                                      <ui:SendMail.Files>
+                                        <scg:List x:TypeArguments="InArgument(x:String)" Capacity="4">
+                                          <InArgument x:TypeArguments="x:String" xml:space="preserve">["C:\Users\Bram van de Munt\Documents\UiPath\RPA_Academy_ArticlePrice\Opdracht RPA  Academy Developer\" + OrderNumber +"_ConfirmationMail.xlsx"]</InArgument>
+                                        </scg:List>
+                                      </ui:SendMail.Files>
+                                    </ui:SendMail>
+                                  </Sequence>
+                                </FlowStep>
+                              </FlowStep.Next>
+                            </FlowStep>
+                          </FlowStep.Next>
+                        </FlowStep>
+                      </FlowStep.Next>
+                    </FlowStep>
+                  </FlowStep.Next>
+                </FlowStep>
+              </FlowStep.Next>
+            </FlowStep>
+          </FlowStep.Next>
+        </FlowStep>
+      </FlowStep.Next>
+    </FlowStep>
+    <x:Reference>__ReferenceID0</x:Reference>
+    <x:Reference>__ReferenceID1</x:Reference>
+    <x:Reference>__ReferenceID2</x:Reference>
+    <x:Reference>__ReferenceID3</x:Reference>
+    <x:Reference>__ReferenceID4</x:Reference>
+    <x:Reference>__ReferenceID5</x:Reference>
+    <x:Reference>__ReferenceID6</x:Reference>
+  </Flowchart>
+</Activity>
